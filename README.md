@@ -19,9 +19,29 @@ In order the work the application require Yoctopuce library and iRacing SDK, whi
 be installed using pip:
 
 ```
-  pip install pyirsdk
-  pip install yoctopuce
+pip install pyirsdk
+pip install yoctopuce
 ```
+
+## Execution
+
+```
+python iracing_leds.py -l 40 -n 8
+```
+Note : By default the application use Yocopuce devices connected by USB, but you can specify a remote
+hostname/IP with ``-r`` option. 
+
+```
+options:
+  -h, --help            show this help message and exit
+  -r REMOTEHUB, --remoteHub REMOTEHUB
+                        Uses remote IP devices (or VirtalHub), instead of local USB.
+  -n NB_LEDS, --nb_leds NB_LEDS
+                        The number of Led connected to the Yocto-Color-V2
+  -l LUMINOSITY, --luminosity LUMINOSITY
+                        The luminosity of the leds (0..100)
+```
+
 
 ## Disclaimer
 

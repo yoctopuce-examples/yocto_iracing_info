@@ -14,15 +14,15 @@ class IRacingLed:
         self.ir_connected = False
         self.last_car_setup_tick = -1
         self.ir = irsdk.IRSDK()
-        self.luminosity = 0x80 * luminosity / 100
-        self.nb_leds = nb_leds
+        self.luminosity = 0x80 * int(luminosity) / 100
+        self.nb_leds = int(nb_leds)
         self.ledCluster = None
         self.display = None
         self.luminosity = 0x20
         self.default_led_colors = []
         self.last_led_color = []
         self.layer0 = None
-        self.lastGear = 'N'
+        self.lastGear = '?'
 
         errmsg = YRefParam()
         err = YAPI.RegisterHub(hub, errmsg)
@@ -103,15 +103,15 @@ class IRacingLed:
         if self.display is not None:
             gear_char = 'X'
             gear = self.ir['Gear']
-            if gear:
-                if gear < 0:
-                    gear_char = 'R'
-                elif gear == 0:
-                    gear_char = 'N'
-                else:
-                    gear_char = "%d" % gear
+            if gear < 0:
+                gear_char = 'R'
+            elif gear == 0:
+                gear_char = 'N'
+            else:
+                gear_char = "%d" % gear
             if gear_char != self.lastGear:
                 self.layer0.clear()
+                self.layer0.selectFont("Large.yfm")
                 self.layer0.drawText(self.display_w / 2, self.display_h / 2, YDisplayLayer.ALIGN.CENTER, gear_char)
                 self.lastGear = gear_char
 

@@ -1,4 +1,5 @@
 #!python3
+import argparse
 
 import irsdk
 
@@ -7,14 +8,14 @@ from yoctopuce.yocto_colorledcluster import *
 
 
 class IRacingLed:
-    def __init__(self):
+    def __init__(self, hub, nb_leds, luminosity):
         self.display_w = 1
         self.display_h = 1
         self.ir_connected = False
         self.last_car_setup_tick = -1
         self.ir = irsdk.IRSDK()
-        self.luminosity = 0x80
-        self.nb_leds = 2
+        self.luminosity = 0x80 * luminosity / 100
+        self.nb_leds = nb_leds
         self.ledCluster = None
         self.display = None
         self.luminosity = 0x20
@@ -24,14 +25,9 @@ class IRacingLed:
         self.lastGear = 'N'
 
         errmsg = YRefParam()
-        err = YAPI.RegisterHub("usb", errmsg)
+        err = YAPI.RegisterHub(hub, errmsg)
         if err != YAPI.SUCCESS:
-            if err == YAPI.DOUBLE_ACCES:
-                # usb access is probably already taken by VirtualHub
-                # try to access Yoctopuce devices through VirtualHub
-                err = YAPI.RegisterHub("usb", errmsg)
-            if err != YAPI.SUCCESS:
-                sys.exit("Unable to register hub :" + errmsg.value)
+            sys.exit("Unable to register " + hub + " : " + errmsg.value)
         YAPI.RegisterDeviceArrivalCallback(self.deviceArrival)
         YAPI.RegisterDeviceRemovalCallback(self.deviceRemoval)
 
@@ -140,8 +136,17 @@ class IRacingLed:
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Light up Yocto-Color-V2 leds according iRacing RPM telemetry infos.')
+    parser.add_argument('-r', '--remoteHub', default='usb',
+                        help='Uses remote IP devices (or VirtalHub), instead of local USB.')
+    parser.add_argument('-n', '--nb_leds', default=2,
+                        help='The number of Led connected to the Yocto-Color-V2')
+    parser.add_argument('-l', '--luminosity', default=100,
+                        help="The luminosity of the leds (0..100)")
+    args = parser.parse_args()
+
     # initializing ir and state
-    i_racing_led = IRacingLed()
+    i_racing_led = IRacingLed(args.remoteHub, args.nb_leds, args.luminosity)
     try:
         i_racing_led.loop()
     except KeyboardInterrupt:

@@ -1,10 +1,10 @@
-# iRacing leds 
+# Yoctopuce iRacing Info
 
 This is a small application allows you to visualise live telemetry data from iRacing on
 some Yoctopuce devices. Shifting leds can be mapped on Yocto-Color-V2 led, and current 
 gear can be displayed on a Yocto-MaxiDisplay
 
-For more details, see [our blog article](https://www.yoctopuce.com)
+For more details, see [our blog article](https://www.yoctopuce.com/EN/article/using-yoctopuce-modules-with-the-iracing-game)
 
 ## Requirement
 - [Python 3.7+](https://www.python.org/downloads/)
@@ -26,7 +26,7 @@ pip install yoctopuce
 ## Execution
 
 ```
-python iracing_leds.py -l 40 -n 8
+python yocto_iracing_info.py -l 40 -n 8
 ```
 Note : By default the application use Yocopuce devices connected by USB, but you can specify a remote
 hostname/IP with ``-r`` option. 
@@ -45,5 +45,5 @@ options:
 
 ## Disclaimer
 
-Yoctoupce is not affiliated with or supported by iRacing.com Motorsport Simulations.
+Yoctopuce is not affiliated with or supported by iRacing.com Motorsport Simulations.
 
